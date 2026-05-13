@@ -37,7 +37,7 @@ export default function Signup() {
       await authApi.post("/auth/register", { email, password, confirmPassword, termsAccepted: true });
 
       if (name.trim()) {
-        sessionStorage.setItem("pending_name", name.trim());
+        localStorage.setItem("pending_name", name.trim());
       }
 
       router.push(`/verify-email?email=${encodeURIComponent(email)}`);

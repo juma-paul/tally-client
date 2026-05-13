@@ -80,7 +80,7 @@ function ChatContent() {
 
   // ── Auth guard ───────────────────────────────────────────────────────────────
   useEffect(() => {
-    if (!isLoading && !user) router.replace("/login");
+    if (!isLoading && !user) router.replace("/");
   }, [user, isLoading, router]);
 
   // ── Load conversation from URL ───────────────────────────────────────────────

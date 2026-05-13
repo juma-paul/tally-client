@@ -17,7 +17,7 @@ export function proxy(request: NextRequest) {
 
   if (!hasAccess && !hasRefresh) {
     const url = request.nextUrl.clone();
-    url.pathname = "/login";
+    url.pathname = "/";
     return NextResponse.redirect(url);
   }
 

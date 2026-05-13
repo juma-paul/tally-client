@@ -33,15 +33,14 @@ function LoginContent() {
     try {
       await authApi.post("/auth/login", { email, password });
 
-      const pendingName = sessionStorage.getItem("pending_name");
+      const pendingName = localStorage.getItem("pending_name");
       if (pendingName) {
         try {
-          await authApi.put("/users/profile", { first_name: pendingName });
           await tallyApi.patch("/users/me", { name: pendingName });
         } catch {
           // Non-critical
         }
-        sessionStorage.removeItem("pending_name");
+        localStorage.removeItem("pending_name");
       }
 
       await refetchUser();
