@@ -44,9 +44,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [refetchUser]);
 
   const logout = async () => {
-    setUser(null);
-    authApi.post("/auth/logout").catch(() => {});
-    // Full browser navigation so React auth guards can't override the destination
+    try {
+      await authApi.post("/auth/logout");
+    } catch {}
     window.location.replace("/");
   };
 
