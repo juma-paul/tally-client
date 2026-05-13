@@ -447,7 +447,7 @@ function ChatContent() {
               </svg>
             </button>
             <span
-              className="text-[1.45rem] font-bold text-zinc-900 leading-none"
+              className="text-[1.45rem] font-bold text-foreground leading-none"
               style={{ letterSpacing: "0.04em" }}
             >
               Ta<span className="text-indigo-500">ll</span>y
