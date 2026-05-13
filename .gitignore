@@ -37,3 +37,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# Private docs (README.md and LICENSE are tracked; docs/ stays local)
+docs/

@@ -1,45 +1,29 @@
-import { NextResponse } from "next/server";
-import type { NextRequest } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export const proxy = (request: NextRequest) => {
-  // Check for auth cookies
-  const accessToken = request.cookies.get("accessToken")?.value;
-  const refreshToken = request.cookies.get("refreshToken")?.value;
-  const isAuthenticated = !!(accessToken && refreshToken);
+// Routes that don't require authentication
+const PUBLIC_ROUTES = ["/", "/login", "/signup"];
 
-  const pathname = request.nextUrl.pathname;
+export function proxy(request: NextRequest) {
+  const { pathname } = request.nextUrl;
 
-  // Define routes
-  const protectedRoutes = ["/dashboard", "/settings"];
-  const authRoutes = ["/auth"];
-
-  // Protected Routes: redirect to login if not authenticated
-  if (
-    protectedRoutes.some((route) => pathname.startsWith(route)) &&
-    !isAuthenticated
-  ) {
-    return NextResponse.redirect(new URL("/auth/login", request.url));
+  // Allow public routes
+  if (PUBLIC_ROUTES.some((r) => pathname === r || pathname.startsWith(r + "/"))) {
+    return NextResponse.next();
   }
 
-  // Public Auth Routes: redirect to dashboard if authenticated
-  if (
-    authRoutes.some((route) => pathname.startsWith(route)) &&
-    isAuthenticated
-  ) {
-    return NextResponse.redirect(new URL("/dashboard", request.url));
+  // Check for either token — if both missing, redirect to login
+  const hasAccess = request.cookies.has("accessToken");
+  const hasRefresh = request.cookies.has("refreshToken");
+
+  if (!hasAccess && !hasRefresh) {
+    const url = request.nextUrl.clone();
+    url.pathname = "/login";
+    return NextResponse.redirect(url);
   }
 
-  // Allow all other routes
   return NextResponse.next();
-};
+}
 
 export const config = {
-  matcher: [
-    // Protected routes
-    "/dashboard/:path*",
-    "/settings/:path*",
-
-    // Auth routes
-    "/auth/:path*",
-  ],
+  matcher: ["/chat", "/chat/:path*"],
 };
